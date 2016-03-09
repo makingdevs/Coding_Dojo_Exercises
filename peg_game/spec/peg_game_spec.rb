@@ -26,4 +26,17 @@ RSpec.describe PegGame do
     end
   end
 
+  [
+    [0, 1, 1],
+    [0, 3, 0.5],
+    [1, 2, 0.5]
+  ].each do |row, col, prob|
+
+    it "should get the probability equals to #{prob} for in #{row}, #{col}" do
+      currentProbability = game.compute(row, col)
+      expect(currentProbability).to eq(prob)
+    end
+
+  end
+
 end

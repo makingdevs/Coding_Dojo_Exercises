@@ -3,7 +3,6 @@ class PegGame
 
   def initialize(rows,cols)
     @board = []
-
     rows.times do | row |
       r = []
       if(row % 2 == 0) then
@@ -31,8 +30,9 @@ class PegGame
   end
 
   def quitSpikeIn(row,col)
-    if @board[row][col] == "X" then
-      @board[row][col] = "."
+    realCol = (row % 2 != 0) ? col-1 : col
+    if @board[row][realCol] == "X" then
+      @board[row][realCol] = "."
       return true
     else
       return false
@@ -41,5 +41,24 @@ class PegGame
 
   def row_at(row)
     @board[row]
+  end
+
+  def compute(row, col)
+    puts "row #{row}, col #{col}"
+    downIsSpike = @board[row+1][col] == 'X'
+    puts "downValue = #{@board[row+1][col]}"
+    downIsLimit = ((@board[row+1][col-1] == '_') or (@board[row+1][col+1] == '_'))
+    puts "downLeft = #{@board[row+1][col-1]}"
+    puts "downRight = #{@board[row+1][col+1]}"
+    puts "currRow = #{@board[row]}"
+    puts "downRow = #{@board[row+1]}"
+    puts "isSpike #{downIsSpike}"
+    puts "isLimit #{downIsLimit}"
+    puts "board #{@board}"
+    if (downIsSpike and !downIsLimit) then
+      return 0.5
+    else
+      return 1
+    end
   end
 end
