@@ -9,7 +9,7 @@ class PegGame
       colsForRow = cols-1
       displacement = 0
       
-      if(row % 2 != 0) then
+      if(isOdd(row)) then
         @board[row][0] = " "
         @board[row][(cols*2)-2] = " "
         colsForRow -= 1
@@ -26,8 +26,11 @@ class PegGame
     end
   end
 
- # def quitSpikeIn(row,col)
- #   @board[row][col] = "."
- # end
+  def quitSpikeIn(row,col)
+    @board[row][isOdd(row) ? ((col*2)+1) : (col*2)] = "."
+  end
 
+  def isOdd(row)
+    row % 2 != 0
+  end
 end
