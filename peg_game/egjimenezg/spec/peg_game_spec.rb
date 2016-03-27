@@ -28,5 +28,9 @@ RSpec.describe PegGame do
     end
   end
   
+  it "should calculate the probabilities of the ways when the ball drop from first column" do
+    probabilities = game.getProbabilityForPositions(0,[0],0)
+    expect(probabilities).to match_array([[{:column => 1,:probability => 1.0}]])
+  end 
   
 end 
