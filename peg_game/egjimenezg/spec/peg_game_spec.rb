@@ -17,7 +17,6 @@ RSpec.describe PegGame do
   ].each do |row, col, size|
     it "should quit spike in (#{row}, #{col}) from board" do
       game_row = game.board[row]
-      p game_row
       spikes = game_row.count('X')
       expect(spikes).to eq size
       game.quitSpikeIn(row, col)
@@ -27,10 +26,15 @@ RSpec.describe PegGame do
       expect(spikes).to eq(size - 1)
     end
   end
-  
-  it "should calculate the probabilities of the ways when the ball drop from first column" do
-    probabilities = game.getProbabilityForPositions(0,[0],0)
-    expect(probabilities).to match_array([[{:column => 1,:probability => 1.0}]])
-  end 
+
+  [
+    [0,[0],0,[[{:column => 1,:probability => 1.0}]]],
+    [0,[6],0,[[{:column => 5,:probability => 1.0}]]]
+  ].each do | row, columns, targetColumn, columnsWithProbability |
+    it "should calculate the probabilities of the ways when the ball drop from columns #{columns}" do
+      probabilities = game.getProbabilityForPositions(row,columns,targetColumn)
+      expect(probabilities).to match_array(columnsWithProbability)
+    end 
+  end
   
 end 
