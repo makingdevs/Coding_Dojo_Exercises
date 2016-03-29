@@ -1,8 +1,10 @@
 class PegGame
-  attr_accessor :board
+  attr_accessor :board,:cols
 
   def initialize(rows,cols)
     @board = []
+    @cols = cols
+
     rows.times do | row |
       @board << []    
 
@@ -28,6 +30,23 @@ class PegGame
 
   def quitSpikeIn(row,col)
     @board[row][isOdd(row) ? ((col*2)+1) : (col*2)] = "."
+  end
+
+  def getProbabilityForPositions(row,columns,targetColumn)
+    columnProbabilities = [] 
+    columns.each_with_index{ |column , index|
+      columnProbabilities << []
+
+      if(@board[row+1][column+1] == 'X') then
+        if(column == 0) then
+          columnProbabilities[index] << {:column => column+1, :probability => 1.0}
+        elsif(column == ((@cols-2)*2)) then
+          columnProbabilities[index] << {:column => column-1, :probability => 1.0} 
+        end
+      end
+    }
+
+    columnProbabilities
   end
 
   def isOdd(row)
