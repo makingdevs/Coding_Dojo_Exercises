@@ -61,6 +61,15 @@ class PegGame
             columnProbabilities << {:column => column+1,:parent => column,:probability=> BigDecimal.new("0.5")} 
           end
         end
+      elsif(@board[row+1][column+1] == '.') then
+        columnWithProbability = {:column => column,:parent => column}
+        if(row+1 == @board.size-1) then
+          columnWithProbability[:probability] = BigDecimal.new("0.0") 
+        else
+          columnWithProbability[:probability] = BigDecimal.new("1.0") 
+        end 
+        
+        columnProbabilities << columnWithProbability
       end
 
     end
@@ -79,9 +88,13 @@ class PegGame
 
       probabilityRows.each do | probabilityRow |
         probabilityMatrix[row+1][probabilityRow[:column]] += (probabilityMatrix[row][probabilityRow[:parent]]*probabilityRow[:probability])
-        probabilityMatrix[row+1][probabilityRow[:column]] = probabilityMatrix[row+1][probabilityRow[:column]].truncate(4)
+        probabilityMatrix[row+1][probabilityRow[:column]] = probabilityMatrix[row+1][probabilityRow[:column]].truncate(6)
       end
       
+      columns.each do | column |
+        probabilityMatrix[row][column] = 0
+      end      
+
       columns.clear 
       columns = probabilityRows.collect{ | probabilityRow | probabilityRow[:column] }
     end
