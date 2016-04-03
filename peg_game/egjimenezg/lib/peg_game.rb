@@ -34,17 +34,25 @@ class PegGame
 
   def getProbabilityForPositions(row,columns,targetColumn)
     columnProbabilities = [] 
-    columns.each_with_index{ |column , index|
-      columnProbabilities << []
 
+    columns.each do | column |
       if(@board[row+1][column+1] == 'X') then
         if(column == 0) then
-          columnProbabilities[index] << {:column => column+1, :probability => 1.0}
+          columnProbabilities << {:column => column+1,:parent => column,:probability => 1.0}
         elsif(column == ((@cols-2)*2)) then
-          columnProbabilities[index] << {:column => column-1, :probability => 1.0} 
+          columnProbabilities << {:column => column-1,:parent => column,:probability => 1.0} 
+        else
+          if(column - targetColumn >= 0) then
+            columnProbabilities << {:column => column-1,:parent => column,:probability=> 0.5}
+          end
+
+          if(column+1-targetColumn+(row+1) < @board.size) then
+            columnProbabilities << {:column => column+1,:parent => column,:probability=> 0.5} 
+          end
         end
       end
-    }
+
+    end
 
     columnProbabilities
   end
