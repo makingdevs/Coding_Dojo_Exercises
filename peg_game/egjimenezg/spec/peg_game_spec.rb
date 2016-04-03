@@ -28,8 +28,9 @@ RSpec.describe PegGame do
   end
 
   [
-    [0,[0],0,[[{:column => 1,:probability => 1.0}]]],
-    [0,[6],0,[[{:column => 5,:probability => 1.0}]]]
+    [0,[0],0,[{:column => 1,:parent => 0,:probability => 1.0}]],
+    [0,[6],0,[{:column => 5,:parent => 6,:probability => 1.0}]],
+    [0,[4],0,[{:column => 3,:parent => 4,:probability => 0.5}]]
   ].each do | row, columns, targetColumn, columnsWithProbability |
     it "should calculate the probabilities of the ways when the ball drop from columns #{columns}" do
       probabilities = game.getProbabilityForPositions(row,columns,targetColumn)
