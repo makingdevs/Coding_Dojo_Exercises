@@ -99,8 +99,19 @@ class PegGame
       columns = probabilityRows.collect{ | probabilityRow | probabilityRow[:column] }
     end
      
-    probabilityMatrix[@board.size-1][targetColumn*2]
+    probability = probabilityMatrix[@board.size-1][targetColumn*2]
+    probabilityMatrix[@board.size-1][targetColumn*2] = 0
+    probability
   end
+
+  def getColumnWithHighestProbabilityToFallInTargetColumn(targetColumn)
+    probabilities = []
+    (cols-1).times do | column |
+      probabilities << getProbabilityFromColumnToTargetColumn(column,targetColumn) 
+    end      
+    highestProbability = probabilities.max
+    {:column => probabilities.index(highestProbability),:probability => highestProbability}
+  end 
 
   def isOdd(row)
     row % 2 != 0
