@@ -42,4 +42,10 @@ RSpec.describe PegGame do
     probability = game.getProbabilityFromColumnToTargetColumn(0,0)
     expect(probability).to eq(0.5)
   end
+
+  it "should find the column with highest probability to fall in the target column" do
+    columnWithProbability = game.getColumnWithHighestProbabilityToFallInTargetColumn(0)
+    expect(columnWithProbability).to include({:column => 0,:probability => BigDecimal.new("0.5") })
+  end
+
 end 
