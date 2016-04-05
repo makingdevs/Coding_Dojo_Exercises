@@ -30,10 +30,10 @@ class PegGame
     end
    
     rows.times do | row |
-      probabilityMatrix << [] 
+      @probabilityMatrix << [] 
 
       (((cols-1)*2)-1).times do | col |
-        probabilityMatrix[row][col] = 0
+        @probabilityMatrix[row][col] = 0
       end
     end 
 
@@ -53,17 +53,18 @@ class PegGame
         elsif(column == ((@cols-2)*2)) then
           columnProbabilities << {:column => column-1,:parent => column,:probability => BigDecimal.new("1.0")} 
         else
-          if(column - targetColumn >= 0) then
+          if(((targetColumn-(column-1)).abs)+(row+1) < @board.size) then
             columnProbabilities << {:column => column-1,:parent => column,:probability=> BigDecimal.new("0.5")}
           end
 
-          if(column+1-targetColumn+(row+1) < @board.size) then
+          if((((column+1)-targetColumn).abs)+(row+1) < @board.size) then
             columnProbabilities << {:column => column+1,:parent => column,:probability=> BigDecimal.new("0.5")} 
           end
         end
       elsif(@board[row+1][column+1] == '.') then
         columnWithProbability = {:column => column,:parent => column}
-        if(row+1 == @board.size-1) then
+
+        if(row+1 == @board.size-1 && column != targetColumn) then
           columnWithProbability[:probability] = BigDecimal.new("0.0") 
         else
           columnWithProbability[:probability] = BigDecimal.new("1.0") 
@@ -79,7 +80,7 @@ class PegGame
 
   def getProbabilityFromColumnToTargetColumn(originColumn,targetColumn)
     targetColumn *= 2
-    probabilityMatrix[0][originColumn*2] = BigDecimal.new("1.0")
+    @probabilityMatrix[0][originColumn*2] = BigDecimal.new("1.0")
     columns = [originColumn*2]
     probabilityRows = []
 
@@ -87,20 +88,19 @@ class PegGame
       probabilityRows = getProbabilityForPositions(row,columns.uniq,targetColumn)  
 
       probabilityRows.each do | probabilityRow |
-        probabilityMatrix[row+1][probabilityRow[:column]] += (probabilityMatrix[row][probabilityRow[:parent]]*probabilityRow[:probability])
-        probabilityMatrix[row+1][probabilityRow[:column]] = probabilityMatrix[row+1][probabilityRow[:column]].truncate(6)
+        @probabilityMatrix[row+1][probabilityRow[:column]] += (@probabilityMatrix[row][probabilityRow[:parent]]*probabilityRow[:probability])
       end
       
       columns.each do | column |
-        probabilityMatrix[row][column] = 0
+        @probabilityMatrix[row][column] = 0
       end      
 
       columns.clear 
       columns = probabilityRows.collect{ | probabilityRow | probabilityRow[:column] }
     end
      
-    probability = probabilityMatrix[@board.size-1][targetColumn*2]
-    probabilityMatrix[@board.size-1][targetColumn*2] = 0
+    probability = @probabilityMatrix[@board.size-1][targetColumn]
+    @probabilityMatrix[@board.size-1][targetColumn] = 0
     probability
   end
 
@@ -110,7 +110,7 @@ class PegGame
       probabilities << getProbabilityFromColumnToTargetColumn(column,targetColumn) 
     end      
     highestProbability = probabilities.max
-    {:column => probabilities.index(highestProbability),:probability => highestProbability}
+    {:column => probabilities.index(highestProbability),:probability => highestProbability.truncate(6)}
   end 
 
   def isOdd(row)
