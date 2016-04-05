@@ -30,7 +30,12 @@ RSpec.describe PegGame do
   [
     [0,[0],0,[{:column => 1,:parent => 0,:probability => BigDecimal.new("1.0")}]],
     [0,[6],0,[{:column => 5,:parent => 6,:probability => BigDecimal.new("1.0")}]],
-    [0,[4],0,[{:column => 3,:parent => 4,:probability => BigDecimal.new("0.5")}]]
+    [0,[4],0,[{:column => 3,:parent => 4,:probability => BigDecimal.new("0.5")}]],
+    [1,[1],0,[{:column => 1,:parent => 1,:probability => BigDecimal.new("1.0")}]],
+    [3,[4],6,[{:column => 4,:parent => 4,:probability => BigDecimal.new("0.0")}]],
+    [1,[3,5],6,[{:column => 4,:parent => 3,:probability => BigDecimal.new("0.5")},
+                {:column => 4,:parent => 5,:probability => BigDecimal.new("0.5")},
+                {:column => 6,:parent => 5,:probability => BigDecimal.new("0.5")}]]
   ].each do | row, columns, targetColumn, columnsWithProbability |
     it "should calculate the probabilities of the ways when the ball drop from columns #{columns}" do
       probabilities = game.getProbabilityForPositions(row,columns,targetColumn)
