@@ -39,4 +39,17 @@ RSpec.describe PegGame do
 
   end
 
+  it "should put the ball in the next row and same column when probability is 1 and down position is empty" do
+    game.rowBallPosition = 0
+    game.colBallPosition = 1
+    game.move_the_ball()
+    expect(game.rowBallPosition).to eq(1)
+    expect(game.colBallPosition).to eq(1)
+  end
+
+  it "should put in currentColumn - 1 when currentColumn is > outColumn" do
+    game.outColumn = 2
+    game.colBallPosition = 4
+    expect(game.next_column()).to eq(3)
+  end
 end
