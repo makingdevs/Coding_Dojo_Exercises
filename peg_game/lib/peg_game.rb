@@ -1,5 +1,8 @@
 class PegGame
   attr_accessor :board
+  attr_accessor :rowBallPosition
+  attr_accessor :colBallPosition
+  attr_accessor :outColumn
 
   def initialize(rows,cols)
     @board = []
@@ -61,4 +64,22 @@ class PegGame
       return 1
     end
   end
+
+  def move_the_ball()
+    @rowBallPosition = @rowBallPosition + 1
+    if (compute(@rowBallPosition, @colBallPosition) != 1) then
+      @colBallPosition = next_column()
+    end
+  end
+
+  def next_column()
+    if (@colBallPosition == @outColumn) then
+      return @colBallPosition+1
+    elsif (@colBallPosition > @outColumn) then
+      return @colBallPosition-1
+    elsif (@colBallPosition < @outColumn) then
+      return @colBallPosition+1
+    end
+  end
+
 end
